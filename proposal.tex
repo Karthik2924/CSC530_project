@@ -1,5 +1,8 @@
 \documentclass{article}
 \usepackage[margin=1in]{geometry}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
 \usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
 \addbibresource{proposal.bib}
 \title{%
@@ -28,6 +31,24 @@ Example citation \cite{fister2013brief}
 	\item Upstream sequence from fiber-specific genes in Ando et al, BMC Genomics, April 2021
 \end{itemize}
 \subsection{The Algorithm}
+\begin{algorithm}
+\caption{Motif Detection with PSO-HMC}
+\begin{algorithmic}
+\ForAll{$\textrm{motif lengths } k \in 5..15$}
+	\State{Initialize a set $M$ of particle position vectors $m$ containing $p$ particles in $\mathbb{Z}^{n}$}
+	\While{not converged or $i <$ iteration limit}
+		\ForAll{particles $m_{i} \in 1..p$}
+			\State{Evaluate the current score for the particle $m_{i}$}
+			\State{Sample $j$ particles and their paths near $m_{i}$ with HMC}
+			\State{Find the particle $m_{\textrm{best}}^{*}$ in $M$ with the best current score}
+			\State{Store $m_{\textrm{best}}^{*}$}
+		\EndFor
+	\EndWhile
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+Sample new particle positions mi+1 from HMC results, with extra probability in the direction of the “best” particle \\
+	Report the best z non-overlapping particle positions
 \subsection{Implementation}
 \begin{itemize}
 	\item Implementation in Julia
