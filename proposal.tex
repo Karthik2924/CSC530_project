@@ -6,21 +6,42 @@
 	\Large Bees? DNA Motif Discovery with Alternating Global-Local Search  \\
 	\large \; \\ - CSC 530: Group 2 Project Proposal -}
 \author{Grant Billings and Karthik Sanka}
-\date{09/16/2022}
+\date{09/29/2022}
 \begin{document}
 \maketitle
+\section*{\large{Abbreviations}}
+\textbf{(l,d)}: an implanted motif of length \textit{l} with \textit{d} random changes; \textbf{DNA}: Deoxyribonucleic Acid; \textbf{HMC}: Hamiltonian Monte Carlo; \textbf{MEME}: Multiple Expectation Maximization for Motif Elicitation; \textbf{PSO}: Particle Swarm Optimization;
 \section{Executive Summary}
 Living organisms have genomes that evolve randomly over time, with natural selection working to increase the frequency of functionally beneficial sequences over generations. Motifs are non-random nucleotide sequences that in many cases have been shown to have biological function in gene regulation. Detection of motifs in sets of sequences is challenging because random mutations make exact matching of sequences ineffective, and brute force methods are very slow. The most popular software package for motif discovery is MEME, which works well but slows down significantly if many query sequences are provided. Motif discovery across large data sets has become an important step in genome analysis. Software that can efficiently mine these sequences for motifs is needed.  \\\\
 Nature-inspired algorithms have promise for DNA motif discovery since they broadly allow for efficient exploration of potential motifs while allowing good solutions to learn from each other. We propose use of Particle Swarm Optimization with Hamiltonian Monte Carlo (PSO-HMC) in alternating cycles of global and local search to quickly find motifs. Our algorithm will be tuned using implanted motifs in simulated data, tested on previously characterized benchmarking data, and finally applied to detect sequence motifs in a cotton genome dataset. Sensitivity, specificity, and running time will be used to compare performance between our software and other widely used alternatives. At the end of the semester, we will present our findings in a poster. We will also create an animation showing the algorithm running and share it upload it to Wikipedia so others can gain a visual intuition for how PSO-HMC works. The PSO-HMC method is a promising tool for DNA motif discovery.
 \section{Abstract}
+
 \section{Prior Work}
 Example citation \cite{fister2013brief}
 \section{Project Description}
-Hi
+
 \subsection{Data}
+\begin{itemize}
+	\item Simulated (l,d) implanted motifs
+	\item Actual annotated \textit{cis} element plant dataset from Sabastian and Contreras-Moreira, Bioinformatics, Nov 2013
+	\item Upstream sequence from fiber-specific genes in Ando et al, BMC Genomics, April 2021
+\end{itemize}
+\subsection{The Algorithm}
+\subsection{Implementation}
+\begin{itemize}
+	\item Implementation in Julia
+	\item Particle Swarm Optimization with \textit{inertia} and \textit{social attraction} parameters
+	\item Hamiltonian Monte Carlo 
+\end{itemize}
 \subsection{Experiments}
 \subsection{Evaluation and Statistics}
 \subsection{Deliverables}
+\begin{itemize}
+	\item Poster
+	\item Graphical demonstration of algorithm
+	\item Public availability of code on GitHub
+\end{itemize}
+\subsection{Anticipated Problems and Solutions}
 \section{Timeline}
 \printbibliography
 \end{document}
