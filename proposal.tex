@@ -35,15 +35,41 @@ Example citation \cite{fister2013brief}
 \caption{Motif Detection with PSO-HMC}
 \begin{algorithmic}
 \ForAll{$\textrm{motif lengths } k \in 5..15$}
-	\State{Initialize a set $M$ of particle position vectors $m$ containing $p$ particles in $\mathbb{Z}^{n}$}
+	\Comment{repeat algorithm for each plausible motif length}
+	\State{Initialize a set $M$ of particle position vectors and velocities $m$ containing $p$ particles in $\mathbb{Z}^{n}$}
+	\State{Initialize a dictionary for the 10 best motif starting positions $M_{\textrm{best}}$ and their scores}
+	\State{Initialize a vector $V$ for storing the scoring distribution information near each $m$}
+	\State{$i \gets 1$}
 	\While{not converged or $i <$ iteration limit}
+		\Comment{search until all particles are very close}
 		\ForAll{particles $m_{i} \in 1..p$}
-			\State{Evaluate the current score for the particle $m_{i}$}
-			\State{Sample $j$ particles and their paths near $m_{i}$ with HMC}
-			\State{Find the particle $m_{\textrm{best}}^{*}$ in $M$ with the best current score}
-			\State{Store $m_{\textrm{best}}^{*}$}
+			\Comment{do local search near each particle}
+			\State{Evaluate the current score with $Score(m_{i})$}
+			\Comment{score is hamming dist. against consensus}
+			\If{$Score(m_{i}) > \min(M_{\textrm{best}})$}
+				\State{Add the score and position $M_{\textrm{best}}[m_{i}] \gets  Score(m_{i})$}
+				\Comment{store for update step and output}
+			\EndIf
+			\State{Initialize a dictionary $O$ for the $q$ motif starting positions and their scores}
+			\ForAll{sampled particles $o_{j} \in 1..q$}
+				\Comment{local search step}
+				\State{Allow the particle to roll in the solution space near $m_{i}$}
+				\State{Add the resulting motif starting positions and scores $O[o_{j}] \gets Score(o_{j})$}
+				\If{$Score(o_{i}) > \min(M_{\textrm{best}})$}
+					\State{Add the score and position $M_{\textrm{best}}[o_{i}] \gets  Score(o_{i})$}
+					\Comment{store for update step and output}
+				\EndIf
+			\EndFor
+			\State{$V[i] \gets O$}
+			\Comment{store local search results for update step}
 		\EndFor
+		\ForAll{particles $m_{i} \in 1..p$}
+			\Comment{global search step to pull particles towards best particle}
+			\State{Use $V[i]$ and $\textrm{argmax}(M_{best})$ to propose a new position and direction for $m_{i}$}
+		\EndFor
+		\State{$i \gets i + 1$}
 	\EndWhile
+	\State \Return{$M_{\textrm{best}}$}
 \EndFor
 \end{algorithmic}
 \end{algorithm}
