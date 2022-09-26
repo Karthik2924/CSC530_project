@@ -15,26 +15,45 @@
 \section*{\large{Abbreviations}}
 \textbf{(l, d)}: a planted motif of length \textit{l} with \textit{d} random changes; \textbf{DNA}: Deoxyribonucleic Acid; \textbf{HMC}: Hamiltonian Monte Carlo; \textbf{MEME}: Multiple Expectation Maximization for Motif Elicitation; \textbf{PSO}: Particle Swarm Optimization;
 \section{Executive Summary}
-Living organisms have genomes that evolve randomly over time, with natural selection working to increase the frequency of functionally beneficial sequences over generations. Motifs are non-random nucleotide sequences that in many cases have been shown to have biological function in gene regulation. Detection of motifs in sets of sequences is challenging because random mutations make exact matching of sequences ineffective, and brute force methods are very slow. The most popular software package for motif discovery is MEME, which works well but slows down significantly if many query sequences are provided. Motif discovery across large data sets has become an important step in genome analysis. \textit{Software that can efficiently mine these sequences for motifs is needed.}  \\\\
+Living organisms have genomes that evolve randomly over time, with natural selection working to increase the frequency of functionally beneficial sequences over generations. Motifs are non-random nucleotide sequences that in many cases have been shown to have biological function in gene regulation. Detection of motifs in sets of sequences is challenging because random mutations make exact matching of sequences ineffective, and brute force methods are very slow. The most popular software package for motif discovery is MEME, which works well but slows down significantly if many query sequences are provided. Motif discovery across large data sets has become an important step in genome analysis. \textit{Software that can efficiently mine these sequences for motifs is needed.}  
+  
 Nature-inspired algorithms have promise for DNA motif discovery since they broadly allow for efficient exploration of potential motifs while allowing good solutions to learn from each other. We propose use of Particle Swarm Optimization with Hamiltonian Monte Carlo (PSO-HMC) in alternating cycles of global and local search to quickly find motifs. Our algorithm will be tuned using implanted motifs in simulated data, tested on previously characterized benchmarking data, and finally applied to discover new sequence motifs in a cotton promoter sequence dataset. Sensitivity, specificity, and running time will be used to compare performance between our software and other widely used alternatives. At the end of the semester, we will present our findings in comparison to other available software in a poster. We will also create an animation showing the algorithm running and share it upload it to Wikipedia so others can gain a visual intuition for how PSO-HMC works. \textit{Our work will contribute to the rapid characterization of large genomic datasets.}
 \section{Abstract}
 Biologists are interested in detecting motifs from DNA sequencing data because of their role in gene expression and chromatin architecture.
 The (l, d) planted motif problem is NP-complete, so heuristics are usually employed to find motifs. Non-probabilistic scoring functions for potential motifs and their positions in sequences are discrete, making the non-convex, non-smooth solution space very difficult to work with using traditional optimization techniques. Nature-inspired algorithms tend to excel in problems of this type due to the ability for the algorithm to exchange information on potential solutions. Here, we propose a novel method for motif discovery using 1) alternating rounds of Particle Swarm Optimization for efficient global exploration of the solution space; and 2) Hamiltonian Monte Carlo for detailed local search to avoid poor outcomes due to local optima. We will implement our algorithm in Julia, and benchmark on synthetic and real datasets. Key deliverables include a poster presentation, as well as release of a graphical representation of the algorithm and code into the public domain. We hope the speed and quality of the predicted motifs will help researchers generate hypotheses for motif sequences that can then be functionally validated through wet lab experiments.
 \section{Prior Work}
-Example citation \cite{fister2013brief}
+Nature-inspired algorithms are elegant heuristic solutions to many of the most challenging computational problems in the sciences \cite{fister2013brief}. Particle swarm optimization (PSO) is one such algorithm, inspired by the behavior of cooperative populations of bees or birds that ``fly together''. The method is reviewed well by Banks et al 2007 \cite{banks2007review}. The main use case of PSO is for finding globally optimal or near-optimal solutions for problems with a non-convex score function, where there may be many local optima throughout the search space.  
+  
+PSO has been used multiple times to find solutions for the motif discovery problem \cite{hardin2005dna,lei2010particle,reddy2010planted,ge2019discovery}. For this proposal, Lei and Ruan, 2010 \cite{lei2010particle}, served as a \textbf{template paper} inspiring our current work. Their main contribution was in implementing PSO for the motif finding problem by modifying the standard algorithm to take discrete inputs, as well as using both consensus sequences and position weight matrices for scoring. Since PSO does not invoke a gradient calculation (or even require the function be continuous or differentiable), it is highly flexible, but makes individual particles unable to explore the local search space efficiently without combining PSO with an additional algorithm. Lei and Ruan note that a main weakness of PSO is the inability to escape from local optima, which they circumvent by occasionally shifting the motif start sites to see if a better scoring solution is nearby. In other works such as Hardin and Rouchka, 2005 \cite{hardin2005dna}, an expectation maximization step is used to search close to the particles to see if a better score can be discovered before the swarm step.
+
 \section{Project Description}
-Description
 \subsection{Data}
-\begin{itemize}
-	\item Simulated (l,d) implanted motifs
-	\item Actual annotated \textit{cis} element plant dataset from Sabastian and Contreras-Moreira, Bioinformatics, Nov 2013
-	\item Upstream sequence from fiber-specific genes in Ando et al, BMC Genomics, April 2021
-\end{itemize}
+Planted motifs of size $l \in [5, 15]$ and $d \in [1, \lfloor \frac{l}{2} \rfloor]$, corresponding to at most half of the nucleotides in the motif being mutated, will be simulated using Julia code (we have already developed the code for simulation). Motifs will be planted into $3$ 1000bp-long sequences during development, but the program will be evaluated on sets of $100$ sequences. Planted motifs will be used for tuning the hyper-parameters in PSO and HMC. The program will also be benchmarked using manually curated motif binding sites from the online database resource \texttt{footprintDB} \cite{sebastian2014footprintdb}. The program will be applied to find motifs in the 1000 bp upstream of 314 Upland cotton fiber-specific discovered in Ando et al, 2021 \cite{ando2021lcm}. Genome sequences 1000 bp upstream of the start codon will be extracted from the v2.1 Upland cotton genome assembly \cite{chen2020genomic} using \texttt{samtools faidx} \cite{li2009sequence}.
 \subsection{The Algorithm}
+Each particle is initialized with some random position and velocity, corresponding to a proposed solution to the problem and the direction of the next proposed solution to the problem if the particle were left unperturbed. The score function is evaluated at each particle, and the particle with the best current score is noted. Then, a second set of velocity vectors between each particle and the best particle are computed. The initial velocity vector and this second vector are then composed to determine the next position of each particle. This is accomplished by weighting the hyper-parameters ``inertia'' (how much each particle wants to keep going in its current direction) and ``social attraction'' (how much each particle wants to head towards the best particle). The theoretical idea is that the algorithm will end up spending more time near the global optimum, converging quickly and exploring the solution space little if the social attraction is weighted highly, and the opposite if inertia is weighted highly.  
+  
+Describe HMC here?
+\subsection{Implementation}
+\begin{itemize}
+	\item Implementation in Julia
+	\item Particle Swarm Optimization with \textit{inertia} and \textit{social attraction} parameters
+	\item Hamiltonian Monte Carlo 
+\end{itemize}
+\subsection{Experiments}
+\subsection{Evaluation and Statistics}
+\subsection{Deliverables}
+\begin{itemize}
+	\item Poster
+	\item Graphical demonstration of algorithm
+	\item Public availability of code on GitHub
+\end{itemize}
+\subsection{Anticipated Problems and Solutions}
+\section{Timeline}
+\section{Appendix}
 \begin{algorithm}
 \caption{Motif Detection with PSO-HMC}
 \begin{algorithmic}
-\ForAll{$\textrm{motif lengths } k \in 5..15$}
+\ForAll{$\textrm{motif lengths } k \in k_{\textrm{min}}..k_{\textrm{max}}$}
 	\Comment{repeat algorithm for each plausible motif length}
 	\State{Initialize a set $M$ of particle position vectors and velocities $m$ containing $p$ particles in $\mathbb{Z}^{n}$}
 	\State{Initialize a dictionary for the 10 best motif starting positions $M_{\textrm{best}}$ and their scores}
@@ -66,6 +85,7 @@ Description
 		\ForAll{particles $m_{i} \in 1..p$}
 			\Comment{global search step to pull particles towards best particle}
 			\State{Use $V[i]$ and $\textrm{argmax}(M_{best})$ to propose a new position and direction for $m_{i}$}
+			\State{$M_{i} \gets m_{i}$}
 		\EndFor
 		\State{$i \gets i + 1$}
 	\EndWhile
@@ -73,24 +93,6 @@ Description
 \EndFor
 \end{algorithmic}
 \end{algorithm}
-Sample new particle positions mi+1 from HMC results, with extra probability in the direction of the “best” particle \\
-	Report the best z non-overlapping particle positions
-\subsection{Implementation}
-\begin{itemize}
-	\item Implementation in Julia
-	\item Particle Swarm Optimization with \textit{inertia} and \textit{social attraction} parameters
-	\item Hamiltonian Monte Carlo 
-\end{itemize}
-\subsection{Experiments}
-\subsection{Evaluation and Statistics}
-\subsection{Deliverables}
-\begin{itemize}
-	\item Poster
-	\item Graphical demonstration of algorithm
-	\item Public availability of code on GitHub
-\end{itemize}
-\subsection{Anticipated Problems and Solutions}
-\section{Timeline}
 \printbibliography
 \end{document}
 
