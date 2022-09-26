@@ -42,20 +42,35 @@ The PSO-HMC algorithm for motif discovery will be implemented using \texttt{Juli
 \begin{itemize}
 	\item \texttt{Score}: returns the score for a set of sequences, motif length, and the proposed starting positions of the motif in each sequence.
 	\item \texttt{FindMotifs}: takes DNA sequences and the motif length as inputs. Returns the ten best consensus motif sequences and the motif start sites in each DNA sequence. Iterates through HMC and PSO until stopping criteria is met.
-	\item \texttt{HMC}: searches the space nearby the particle's current position using Hamiltonian dynamics. Returns an estimate of the score density in the region surrounding the particle.
-	\item \texttt{PSO}: modifies the density for each particle given the output of \texttt{HMC} for the particle and the position of the best particle. Works by adding more weight to the density in the direction of the highest scoring particle.
-	\item \texttt{UpdateParticle!}: draws a new position for each particle. Sets each particles new velocity by composing its current velocity with a vector in the direction of highest scoring particle. Must be fine-tuned based on inertia and social attraction hyper-parameters.
+	\item \texttt{HMC}: searches the space nearby the particle's current position using Hamiltonian dynamics. Utilizes a discrete estimate of a line integral (based on a discrete version of finite differences) rather than the gradient to determine the trajectory across the solution space. Returns an estimate of the score density in the region surrounding the particle.
+	\item \texttt{PSO}: augments the score density near each particle given the output of \texttt{HMC} for the particle and the position of the best particle. Works by adding more weight to the density in the direction of the highest scoring particle.
+	\item \texttt{UpdateParticle!}: draws a new position for each particle. Sets each particle's new velocity by composing its current velocity with a vector in the direction of highest scoring particle. Must be fine-tuned based on inertia and social attraction hyper-parameters.
 \end{itemize}
 \subsection{Experiments}
+Computational experiments will be conducted to answer three questions:
+\subsubsection{Question 1: How does PSO-HMC CPU and memory usage scale to length and number of input sequences?}
+\subsubsection{Question 2: How many mismatches can PSO-HMC tolerate in detecting motifs?}
+\subsubsection{Question 3: What is PSO-HMC performance when there are zero instances of the motif in some sequences?}
 \subsection{Evaluation and Statistics}
+\begin{itemize}
+	\item \textbf{Sensitivity}
+	\item \textbf{Specificity}
+	\item \textbf{Running Time}
+	\item \textbf{Memory Usage}
+\end{itemize}
 \subsection{Deliverables}
 \begin{itemize}
-	\item Poster
-	\item Graphical demonstration of algorithm
-	\item Public availability of code on GitHub
+	\item \textbf{Poster} presentation to CSC 530 classmates
+	\item \textbf{Graphics} demonstrating the algorithm
+	\item \textbf{Code} on GitHub
 \end{itemize}
 \subsection{Anticipated Problems and Solutions}
+\begin{itemize}
+	\item Poor model convergence/long running time?
+\end{itemize}
+\pagebreak
 \section{Timeline}
+\pagebreak
 \section{Appendix}
 \begin{algorithm}
 \caption{Motif Detection with PSO-HMC}
@@ -100,6 +115,7 @@ The PSO-HMC algorithm for motif discovery will be implemented using \texttt{Juli
 \EndFor
 \end{algorithmic}
 \end{algorithm}
+\pagebreak
 \printbibliography
 \end{document}
 
