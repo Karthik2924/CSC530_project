@@ -44,12 +44,8 @@ Planted motifs of size $l \in [5, 15]$ and $d \in [1, \lfloor \frac{l}{2} \rfloo
 
   The program will be applied to find motifs in the 1000 bp upstream of 314 Upland cotton fiber-specific discovered in Ando et al, 2021 \cite{ando2021lcm}. Genome sequences 1000 bp upstream of the start codon will be extracted from the v2.1 Upland cotton genome assembly \cite{chen2020genomic} using \texttt{samtools faidx} \cite{li2009sequence}.
 \subsection{The Algorithm}
-\textcolor{red}{GRANT} \\
-In PSO, each particle is initialized with some random position and velocity, corresponding to a proposed solution to the problem and the direction of the next proposed solution to the problem if the particle were left unperturbed. The score function is evaluated at each particle, and the particle with the best current score is noted. Then, a second set of velocity vectors between each particle and the best particle are computed. The initial velocity vector and this second vector are then composed to determine the next position of each particle. This is accomplished by weighting the hyper-parameters ``inertia'' (how much each particle wants to keep going in its current direction) and ``social attraction'' (how much each particle wants to head towards the best particle). The theoretical idea is that the algorithm will end up spending more time near the global optimum, converging quickly and exploring the solution space little if the social attraction is weighted highly, and the opposite if inertia is weighted highly. PSO does not involved calculating the gradient or any other parameters for score of nearby solutions.
-  
-  In contrast, HMC classically uses the gradient to determine where particles should go next. In a broad sense, HMC starts by initializing the search with some proposed position in the search space. Then, the particle is pushed with some random velocity, and it "rolls" throughout the search space. The speed it rolls is determined by the gradient, such that the particle will end up exploring more of the space if it continues finding better and better potential solutions. The speed is determined by calculating the gradient (exactly if a closed form is available, otherwise some form of automatic differentiation is used to estimate the gradient) as the particle rolls, and the particles trajectory and speed are updated. Eventually, the particle stops moving, and the position and score are recorded. This process is repeated dozens are hundreds of times, and as the algorithm learns where good scores are (and are not) located, the proposed particle starting positions will be occur more frequently in areas of good scores. In this way, HMC is often able to efficiently explore the search space and approximate the density of the desired function without computing any quantities precisely. Since the formulation of the motif discovery problem 
-  
-  We propose to use this method for efficient local search between rounds of ``swarming''. Particles will search nearby using HMC, generating an approximate score density in its neighborhood. Then, the density will be updated so that new particle positions are likely to be drawn in the direction of the global best particle. A new position and velocity is drawn for each particle, and the cycle repeats until finishing criteria are met.
+\textcolor{cyan}{done!} \\
+  We propose to use this method for efficient local search between rounds of ``swarming''. Particles will search nearby using HMC, generating an approximate score density in its neighborhood. Then, the density will be updated so that new particle positions are likely to be drawn in the direction of the global best particle. A new position and velocity is drawn for each particle, and the cycle repeats until finishing criteria are met. Additional detail is presented in the Appendix.
 \subsection{Implementation}
 \textcolor{cyan}{done!} \\
 The PSO-HMC algorithm for motif discovery will be implemented using \texttt{Julia 1.8} \cite{Julia-2017} within a  \texttt{Jupyter Notebook}  \cite{Kluyver2016jupyter}. Five main functions will need to be implemented:
@@ -76,7 +72,7 @@ Computational experiments will be conducted to answer three questions:
 	\item \textbf{Memory Usage}
 \end{itemize}
 \subsection{Deliverables}
-\textcolor{red}{GRANT} \\
+\textcolor{cyan}{done!} \\
 A poster presentation to CSC 530 classmates will be made at the end of the project. The poster will include a diagram showing how the PSO-HMC algorithm work; plots showing running time vs motif length, number of mismatches in, input sequence number, input sequence length for the simulated dataset; sensitivity and specificy for the motifs in the benchmarked data set from the database; and example sequence logos for motifs detected from the cotton dataset.  
   
   Code will be made available on a public GitHub repo (\url{https://github.com/gtbil/CSC530_project}) at the project's close.  
@@ -90,9 +86,16 @@ A poster presentation to CSC 530 classmates will be made at the end of the proje
 \pagebreak
 \section{Timeline}
 \textcolor{green}{todo!} \\
+\begin{itemize}
+	\item Oct 24: Complete initial implementation of algorithm.
+	\item Nov 29: Present poster findings to class.
+\end{itemize}
 \pagebreak
 \section{Appendix}
-\textcolor{cyan}{done!}
+\textcolor{cyan}{done!} \\
+In PSO, each particle is initialized with some random position and velocity, corresponding to a proposed solution to the problem and the direction of the next proposed solution to the problem if the particle were left unperturbed. The score function is evaluated at each particle, and the particle with the best current score is noted. Then, a second set of velocity vectors between each particle and the best particle are computed. The initial velocity vector and this second vector are then composed to determine the next position of each particle. This is accomplished by weighting the hyper-parameters ``inertia'' (how much each particle wants to keep going in its current direction) and ``social attraction'' (how much each particle wants to head towards the best particle). The theoretical idea is that the algorithm will end up spending more time near the global optimum, converging quickly and exploring the solution space little if the social attraction is weighted highly, and the opposite if inertia is weighted highly. PSO does not involved calculating the gradient or any other parameters for score of nearby solutions.
+  
+  In contrast, HMC classically uses the gradient to determine where particles should go next. In a broad sense, HMC starts by initializing the search with some proposed position in the search space. Then, the particle is pushed with some random velocity, and it "rolls" throughout the search space. The speed it rolls is determined by the gradient, such that the particle will end up exploring more of the space if it continues finding better and better potential solutions. The speed is determined by calculating the gradient (exactly if a closed form is available, otherwise some form of automatic differentiation is used to estimate the gradient) as the particle rolls, and the particles trajectory and speed are updated. Eventually, the particle stops moving, and the position and score are recorded. This process is repeated dozens are hundreds of times, and as the algorithm learns where good scores are (and are not) located, the proposed particle starting positions will be occur more frequently in areas of good scores. In this way, HMC is often able to efficiently explore the search space and approximate the density of the desired function without computing any quantities precisely. Since the formulation of the motif discovery problem 
 \begin{algorithm}
 \caption{Motif Detection with PSO-HMC}
 \begin{algorithmic}
