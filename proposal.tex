@@ -58,9 +58,10 @@ The PSO-HMC algorithm for motif discovery will be implemented using \texttt{Juli
 \end{itemize}
   Some packages like \texttt{StatsBase, Random} and \texttt{Distances} will be used for basic functionality not included in base Julia, but not for the PSO or HMC implementation. Additionally, the \texttt{WebLogo} available at their website (\url{http://weblogo.threeplusone.com/}) will be used for visualizing detected motifs.
 \subsection{Computational Experiments}
-\textcolor{red}{GRANT} \\
-Computational experiments will be conducted to answer three questions:
+\textcolor{red}{GRANT} \\  
+  Computational experiments will be conducted to answer three questions:
 \subsubsection{Question 1: How does PSO-HMC CPU and memory usage scale to length and number of input sequences?}
+
 \subsubsection{Question 2: How many mismatches can PSO-HMC tolerate in detecting motifs?}
 \subsubsection{Question 3: What is PSO-HMC performance when there are zero instances of the motif in some sequences?}
 \subsection{Evaluation and Statistics}
@@ -83,11 +84,17 @@ A poster presentation to CSC 530 classmates will be made at the end of the proje
 \begin{itemize}
 	\item Poor model convergence/long running time?
 \end{itemize}
-\pagebreak
 \section{Timeline}
-\textcolor{green}{todo!} \\
+\textcolor{cyan}{done!} \\
+Major goals for completing parts of the project are given below.
 \begin{itemize}
-	\item Oct 24: Complete initial implementation of algorithm.
+	\item Oct  3---14: Implement the basic code of the algorithm in Julia.
+	\item Oct 17---21: Unit testing and debugging.
+	\item Oct 24---28: Hyper-parameter tuning on simulated data.
+	\item Oct 31---Nov 4: Conduct computational experiments on simulated and manually currated datasets.
+	\item Nov 7---11: Conduct computational experiment on actual promoter sequence data from cotton.
+	\item Nov 15---18: Initial drafting of poster images and text. Statistical analysis of results.
+	\item Nov 21---25: Arrangement of poster and revision. Printing on Friday Nov 25.
 	\item Nov 29: Present poster findings to class.
 \end{itemize}
 \pagebreak
