@@ -16,16 +16,13 @@
 \section*{\large{Abbreviations}}
 \textbf{(l, d)}: a planted motif of length \textit{l} with \textit{d} random changes; \textbf{DNA}: Deoxyribonucleic Acid; \textbf{HMC}: Hamiltonian Monte Carlo; \textbf{MEME}: Multiple Expectation Maximization for Motif Elicitation; \textbf{PSO}: Particle Swarm Optimization;
 \section{Executive Summary}
-\textcolor{cyan}{done!} \\
 Living organisms have genomes that evolve randomly over time, with natural selection working to increase the frequency of functionally beneficial sequences over generations. Motifs are non-random nucleotide sequences that in many cases have been shown to have biological function in gene regulation. Detection of motifs in sets of sequences is challenging because random mutations make exact matching of sequences ineffective, and brute force methods are very slow. The most popular software package for motif discovery is MEME, which works well but slows down significantly if many query sequences are provided. Motif discovery across large data sets has become an important step in genome analysis. \textit{Software that can efficiently mine these sequences for motifs is needed.}  
   
 Nature-inspired algorithms have promise for DNA motif discovery since they broadly allow for efficient exploration of potential motifs while allowing good solutions to learn from each other. We propose use of Particle Swarm Optimization with Hamiltonian Monte Carlo (PSO-HMC) in alternating cycles of global and local search to quickly find motifs. Our algorithm will be tuned using implanted motifs in simulated data, tested on previously characterized benchmarking data, and finally applied to discover new sequence motifs in a cotton promoter sequence dataset. Precision, recall, F1 score, memory usage, and running time will be used to compare performance between our software and other widely used alternatives. At the end of the semester, we will present our findings in comparison to other available software in a poster and submit a project report. We will also create an animation showing the algorithm running and share it upload it to Wikipedia so others can gain a visual intuition for how PSO-HMC works. \textit{Our work will contribute to the rapid characterization of large genomic datasets.}
 \section{Abstract}
-\textcolor{cyan}{done!} \\
 Biologists are interested in detecting motifs from DNA sequencing data because of their role in gene expression and chromatin architecture.
 The (l, d) planted motif problem is NP-complete, so heuristics are usually employed to find motifs. Non-probabilistic scoring functions for potential motifs and their positions in sequences are discrete, making the non-convex, non-smooth solution space very difficult to work with using traditional optimization techniques. Nature-inspired algorithms tend to excel in problems of this type due to the ability for the algorithm to exchange information on potential solutions. Here, we propose a novel method for motif discovery using 1) alternating rounds of Particle Swarm Optimization for efficient global exploration of the solution space; and 2) Hamiltonian Monte Carlo for detailed local search to avoid poor outcomes due to local optima. We will implement our algorithm in Julia, and benchmark on synthetic and real datasets. Key deliverables include a poster presentation and project report, as well as release of a graphical representation of the algorithm and code into the public domain. We hope the speed and quality of the predicted motifs will help researchers generate hypotheses for motif sequences that can then be functionally validated through wet lab experiments.
 \section{Prior Work}
-\textcolor{blue}{KARTHIK} \\
 Nature-inspired algorithms are elegant heuristic solutions to many of the most challenging computational problems in the sciences \cite{fister2013brief}. Particle swarm optimization (PSO) is one such algorithm, inspired by the behavior of cooperative populations of bees or birds that ``fly together''. The method is reviewed well by Banks et al 2007 \cite{banks2007review}. The main use case of PSO is for finding globally optimal or near-optimal solutions for problems with a non-convex score function, where there may be many local optima throughout the search space. 
   
     
@@ -37,17 +34,14 @@ PSO has been used multiple times to find solutions for the motif discovery probl
 The algorithm also makes another important contribution to the motif finding problem using PSO, they make available a choice to the user to enter motif length and gap length to customize the algorithm to find gapped motifs. 
 \section{Project Description}
 \subsection{Data}
-\textcolor{cyan}{done!} \\
 Planted motifs of size $l \in [5, 15]$ and $d \in [1, \lfloor \frac{l}{2} \rfloor]$, corresponding to at most half of the nucleotides in the motif being mutated, will be simulated using Julia code (we have already developed the code for simulation). Motifs will be planted into $3$ 1000bp-long sequences during development, but the program will be evaluated on sets of more sequences (see \textbf{Computational Experiments}. Planted motifs will be used for tuning the hyper-parameters in PSO and HMC.  
   
   The program will also be benchmarked using manually curated motif binding sites from the online database resource \texttt{footprintDB} \cite{sebastian2014footprintdb}.  
 
   The program will be applied to find motifs in the 1000 bp upstream of 314 Upland cotton fiber-specific discovered in Ando et al, 2021 \cite{ando2021lcm}. Genome sequences 1000 bp upstream of the start codon will be extracted from the v2.1 Upland cotton genome assembly \cite{chen2020genomic} using \texttt{samtools faidx} \cite{li2009sequence}.
 \subsection{The Algorithm}
-\textcolor{cyan}{done!} \\
   We propose to use this method for efficient local search between rounds of ``swarming''. Particles will search nearby using HMC, generating an approximate score density in its neighborhood. Then, the density will be updated so that new particle positions are likely to be drawn in the direction of the global best particle. A new position and velocity is drawn for each particle, and the cycle repeats until finishing criteria are met. Additional detail is presented in the Appendix.
 \subsection{Implementation}
-\textcolor{cyan}{done!} \\
 The PSO-HMC algorithm for motif discovery will be implemented using \texttt{Julia 1.8} \cite{Julia-2017} within a  \texttt{Jupyter Notebook}  \cite{Kluyver2016jupyter}. Five main functions will need to be implemented:
 \begin{itemize}
 	\item \texttt{Score}: returns the score for a set of sequences, motif length, and the proposed starting positions of the motif in each sequence.
@@ -57,11 +51,12 @@ The PSO-HMC algorithm for motif discovery will be implemented using \texttt{Juli
 	\item \texttt{UpdateParticle!}: draws a new position for each particle. Sets each particle's new velocity by composing its current velocity with a vector in the direction of highest scoring particle. Must be fine-tuned based on inertia and social attraction hyper-parameters.
 \end{itemize}
   Some packages like \texttt{StatsBase, Random} and \texttt{Distances} will be used for basic functionality not included in base Julia, but not for the PSO or HMC implementation. Additionally, the \texttt{WebLogo} available at their website (\url{http://weblogo.threeplusone.com/}) will be used for visualizing detected motifs.
-\subsection{Computational Experiments}
-\textcolor{red}{GRANT} \\  
+\subsection{Computational Experiments} 
   Computational experiments will be conducted to answer three questions. In each case, the performance of our program will be compared to MEME and the PSO implementation in our template paper.
   
   Sets of simulated input data will be generated according to all of the following combinations: sequence length \texttt{100, 1,000:1,000:10,000}; number of input sequences \texttt{20:20:200}; motif length \texttt{5:1:15}; and number of mutations in the planted motif \texttt{1:1:$\lfloor \frac{l}{2} \rfloor$}, resulting in a total of \texttt{$11 \times 10 \times 11 \times 7 = 8,470$} combinations of input variables. At first, a set of 100 instances will be used, and if results are highly variable between runs of the algorithm on the same input data or different data (evaluated using boxplots of performance on individual instances), additional instances will be used.
+  
+  We are proposing to use all combinations of the variables controlling the input motifs/sequences since it is possible that the algorithm will perform in unpredictable ways at different combinations of inputs. For example, maybe longer sequences and and shorter motif lengths will be harder for the algorithm to process, but having both of those conditions will increase the difficulty non-additively. Doing all combinations will help us understand what these interacting effects may do.
 \subsubsection{Question 1: How does PSO-HMC CPU and memory usage empirically scale to length and number of input sequences?}
 CPU and memory usage will be determined using the \texttt{@time} macro from the algorithm's performance on the input datasets varying in length and number of input sequences.
 \subsubsection{Question 2: How many mismatches can PSO-HMC tolerate in detecting motifs?}
@@ -73,7 +68,6 @@ Manually annotated transcription factor binding site data from \texttt{footprint
 \subsubsection{Question 5: Does PSO-HMC detect anything interesting or convincing on new, real data? How do these results compare to other software?}
 The cotton fiber gene promoter dataset will be run through our program, MEME, and the PSO implementation in our template paper. Logo plots for the highest scoring motif in each sequence for the programs will be compared. The algorithm will be run for multiple motif lengths, and results will be manually inspected to determine which motif length should be displayed in the logo plots. It may be different motif lengths in different programs, since each will likely find different consensus motifs.
 \subsection{Evaluation and Statistics}
-\textcolor{blue}{KARTHIK} \\
 We will evaluate and compare the results obtained from our algorithm using the following metrics and synthetic and annotated datasets.
 \begin{itemize}
 	\item \textbf{Precision}: can be calculated by computing the ratio number of correctly predicted sites to the number of predicted sites.
@@ -83,23 +77,20 @@ We will evaluate and compare the results obtained from our algorithm using the f
 	\item \textbf{Memory Usage} The extra memory used to run the algorithm and its scalability to larger input sequences will be discussed in our analysis.
 \end{itemize}
 \subsection{Deliverables}
-\textcolor{cyan}{done!} \\
 A project report and poster presentation to CSC 530 classmates will be finalized at the end of the project. The poster will include a diagram showing how the PSO-HMC algorithm work; plots showing running time vs motif length, number of mismatches in, input sequence number, input sequence length for the simulated dataset; sensitivity and specificy for the motifs in the benchmarked data set from the database; and example sequence logos for motifs detected from the cotton dataset.  
   
   Code will be made available on a public GitHub repo (\url{https://github.com/gtbil/CSC530_project}) at the project's close.  
   
   As a final deliverable, an animated gif showing how the algorithm works for two input sequences will be made and shared on a relevant Wikipedia page (like \url{https://en.wikipedia.org/wiki/Particle_swarm_optimization/}).
 \subsection{Anticipated Problems and Solutions}
-\textcolor{blue}{KARTHIK} \\
 \begin{itemize}
-    \item Stuck in local optima : Restart randomly and at random initial positions.
-	\item Poor model convergence due to bad sequence initialization: To be handled by starting with a random subsequence of the input sequence.
-	\item Hard to find hyper-parameters that work well in many situations: Make hyper-parameters adaptive so they change based on the rate at which the best score changes.
-	\item Difficult in applying or using HMC: Implement a simpler Monte Carlo method, like Metropolis-Hastings.
-	\item Running time is too slow for all combinations of variables in computational experiments: The experiments will be modified to only change on variable at a time.
+    \item \textit{Stuck in local optima}: Restart randomly and at random initial positions. If this is ineffective, a heuristic will be used to find motif starting positions rather than random initialization.
+	\item \textit{Poor model convergence due to bad sequence initialization}: To be handled by starting with a random subsequence of the input sequence.
+	\item \textit{Hard to find hyper-parameters that work well in many situations}: Make hyper-parameters adaptive so they change based on the rate at which the best score changes.
+	\item \textit{Difficultly in applying or using HMC}: Implement a simpler Monte Carlo method, like Metropolis-Hastings.
+	\item \textit{Running time is too slow for all combinations of variables in computational experiments}: The experiments will be modified to only change on variable at a time. Additionally, use of the \texttt{Henry2} computational cluster will be employed if more compute is needed to complete the experiments. A memory or running time profiler will be used if the problems appear to be with our implementation/code.
 \end{itemize}
 \section{Timeline}
-\textcolor{cyan}{done!} \\
 Major goals for completing parts of the project are given below. 
 \begin{itemize}
 	\item Oct  3---Nov 18: Writing of the project report.
@@ -114,7 +105,6 @@ Major goals for completing parts of the project are given below.
 \end{itemize}
 \pagebreak
 \section{Appendix}
-\textcolor{cyan}{done!} \\
 In PSO, each particle is initialized with some random position and velocity, corresponding to a proposed solution to the problem and the direction of the next proposed solution to the problem if the particle were left unperturbed. The score function is evaluated at each particle, and the particle with the best current score is noted. Then, a second set of velocity vectors between each particle and the best particle are computed. The initial velocity vector and this second vector are then composed to determine the next position of each particle. This is accomplished by weighting the hyper-parameters ``inertia'' (how much each particle wants to keep going in its current direction) and ``social attraction'' (how much each particle wants to head towards the best particle). The theoretical idea is that the algorithm will end up spending more time near the global optimum, converging quickly and exploring the solution space little if the social attraction is weighted highly, and the opposite if inertia is weighted highly. PSO does not involved calculating the gradient or any other parameters for score of nearby solutions.
   
   In contrast, HMC classically uses the gradient to determine where particles should go next. In a broad sense, HMC starts by initializing the search with some proposed position in the search space. Then, the particle is pushed with some random velocity, and it "rolls" throughout the search space. The speed it rolls is determined by the gradient, such that the particle will end up exploring more of the space if it continues finding better and better potential solutions. The speed is determined by calculating the gradient (exactly if a closed form is available, otherwise some form of automatic differentiation is used to estimate the gradient) as the particle rolls, and the particles trajectory and speed are updated. Eventually, the particle stops moving, and the position and score are recorded. This process is repeated dozens are hundreds of times, and as the algorithm learns where good scores are (and are not) located, the proposed particle starting positions will be occur more frequently in areas of good scores. In this way, HMC is often able to efficiently explore the search space and approximate the density of the desired function without computing any quantities precisely. Since the formulation of the motif discovery problem 
