@@ -66,11 +66,14 @@ Sets of simulated input data will be generated according to all of the following
 \subsubsection{Question 3: What is PSO-HMC performance when there are zero instances of the motif in some sequences?}
 \subsection{Evaluation and Statistics}
 \textcolor{blue}{KARTHIK} \\
+We will evaluate and compare the results obtained from our algorithm using the following metrics and synthetic and annotated datasets.
 \begin{itemize}
-	\item \textbf{Sensitivity}
-	\item \textbf{Specificity}
-	\item \textbf{Running Time}
-	\item \textbf{Memory Usage}
+	\item \textbf{Prcecision}: can be calculated by computing the ratio number of correctly predicted sites to the number of predicted sites.
+	\item \textbf{Recall}: calculated by computing the number of correctly predicted sites to the binding sites present in the sequence.
+	\item \textbf{F1 Score}: It is the harmonic mean of precision and recall and infroms us about the balance between the two.
+	\item \textbf{Running Time}:
+	A run-time comparison will be plotted for different algorithms
+	\item \textbf{Memory Usage} The extra memory used to run the algorithm and its scalability to larger input sequences will be discussed in our analysis.
 \end{itemize}
 \subsection{Deliverables}
 \textcolor{cyan}{done!} \\
@@ -82,7 +85,9 @@ A poster presentation to CSC 530 classmates will be made at the end of the proje
 \subsection{Anticipated Problems and Solutions}
 \textcolor{blue}{KARTHIK} \\
 \begin{itemize}
-	\item Poor model convergence/long running time?
+    \item Stuck in local optima : Restart randomly and at random initial positions.
+	\item Poor model convergence due to bad sequence initialization. To be handled by starting with a random subsequence of the input sequence.
+	
 \end{itemize}
 \section{Timeline}
 \textcolor{cyan}{done!} \\
