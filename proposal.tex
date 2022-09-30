@@ -10,7 +10,7 @@
 	\Large Bees? DNA Motif Discovery with Alternating Global-Local Search  \\
 	\large \; \\ - CSC 530: Group 2 Project Proposal -}
 \author{Grant Billings and Karthik Sanka}
-\date{09/29/2022}
+\date{09/30/2022}
 \begin{document}
 \maketitle
 \section*{\large{Abbreviations}}
@@ -19,7 +19,7 @@
 \textcolor{cyan}{done!} \\
 Living organisms have genomes that evolve randomly over time, with natural selection working to increase the frequency of functionally beneficial sequences over generations. Motifs are non-random nucleotide sequences that in many cases have been shown to have biological function in gene regulation. Detection of motifs in sets of sequences is challenging because random mutations make exact matching of sequences ineffective, and brute force methods are very slow. The most popular software package for motif discovery is MEME, which works well but slows down significantly if many query sequences are provided. Motif discovery across large data sets has become an important step in genome analysis. \textit{Software that can efficiently mine these sequences for motifs is needed.}  
   
-Nature-inspired algorithms have promise for DNA motif discovery since they broadly allow for efficient exploration of potential motifs while allowing good solutions to learn from each other. We propose use of Particle Swarm Optimization with Hamiltonian Monte Carlo (PSO-HMC) in alternating cycles of global and local search to quickly find motifs. Our algorithm will be tuned using implanted motifs in simulated data, tested on previously characterized benchmarking data, and finally applied to discover new sequence motifs in a cotton promoter sequence dataset. Sensitivity, specificity, and running time will be used to compare performance between our software and other widely used alternatives. At the end of the semester, we will present our findings in comparison to other available software in a poster and submit a project report. We will also create an animation showing the algorithm running and share it upload it to Wikipedia so others can gain a visual intuition for how PSO-HMC works. \textit{Our work will contribute to the rapid characterization of large genomic datasets.}
+Nature-inspired algorithms have promise for DNA motif discovery since they broadly allow for efficient exploration of potential motifs while allowing good solutions to learn from each other. We propose use of Particle Swarm Optimization with Hamiltonian Monte Carlo (PSO-HMC) in alternating cycles of global and local search to quickly find motifs. Our algorithm will be tuned using implanted motifs in simulated data, tested on previously characterized benchmarking data, and finally applied to discover new sequence motifs in a cotton promoter sequence dataset. Precision, recall, F1 score, memory usage, and running time will be used to compare performance between our software and other widely used alternatives. At the end of the semester, we will present our findings in comparison to other available software in a poster and submit a project report. We will also create an animation showing the algorithm running and share it upload it to Wikipedia so others can gain a visual intuition for how PSO-HMC works. \textit{Our work will contribute to the rapid characterization of large genomic datasets.}
 \section{Abstract}
 \textcolor{cyan}{done!} \\
 Biologists are interested in detecting motifs from DNA sequencing data because of their role in gene expression and chromatin architecture.
@@ -38,7 +38,7 @@ The algorithm also makes another important contribution to the motif finding pro
 \section{Project Description}
 \subsection{Data}
 \textcolor{cyan}{done!} \\
-Planted motifs of size $l \in [5, 15]$ and $d \in [1, \lfloor \frac{l}{2} \rfloor]$, corresponding to at most half of the nucleotides in the motif being mutated, will be simulated using Julia code (we have already developed the code for simulation). Motifs will be planted into $3$ 1000bp-long sequences during development, but the program will be evaluated on sets of $100$ sequences. Planted motifs will be used for tuning the hyper-parameters in PSO and HMC.  
+Planted motifs of size $l \in [5, 15]$ and $d \in [1, \lfloor \frac{l}{2} \rfloor]$, corresponding to at most half of the nucleotides in the motif being mutated, will be simulated using Julia code (we have already developed the code for simulation). Motifs will be planted into $3$ 1000bp-long sequences during development, but the program will be evaluated on sets of more sequences (see \textbf{Computational Experiments}. Planted motifs will be used for tuning the hyper-parameters in PSO and HMC.  
   
   The program will also be benchmarked using manually curated motif binding sites from the online database resource \texttt{footprintDB} \cite{sebastian2014footprintdb}.  
 
@@ -59,25 +59,32 @@ The PSO-HMC algorithm for motif discovery will be implemented using \texttt{Juli
   Some packages like \texttt{StatsBase, Random} and \texttt{Distances} will be used for basic functionality not included in base Julia, but not for the PSO or HMC implementation. Additionally, the \texttt{WebLogo} available at their website (\url{http://weblogo.threeplusone.com/}) will be used for visualizing detected motifs.
 \subsection{Computational Experiments}
 \textcolor{red}{GRANT} \\  
-  Computational experiments will be conducted to answer three questions:
-\subsubsection{Question 1: How does PSO-HMC CPU and memory usage scale to length and number of input sequences?}
-Sets of simulated input data will be generated according to all of the following combinations: sequence length \texttt{100:100:10,000}; motif length \texttt{5:1:15}; and number of mutations in the planted motif \texttt{1:1:$\lfloor \frac{l}{2} \rfloor$}.
+  Computational experiments will be conducted to answer three questions. In each case, the performance of our program will be compared to MEME and the PSO implementation in our template paper.
+  
+  Sets of simulated input data will be generated according to all of the following combinations: sequence length \texttt{100, 1,000:1,000:10,000}; number of input sequences \texttt{20:20:200}; motif length \texttt{5:1:15}; and number of mutations in the planted motif \texttt{1:1:$\lfloor \frac{l}{2} \rfloor$}, resulting in a total of \texttt{$11 \times 10 \times 11 \times 7 = 8,470$} combinations of input variables. At first, a set of 100 instances will be used, and if results are highly variable between runs of the algorithm on the same input data or different data (evaluated using boxplots of performance on individual instances), additional instances will be used.
+\subsubsection{Question 1: How does PSO-HMC CPU and memory usage empirically scale to length and number of input sequences?}
+CPU and memory usage will be determined using the \texttt{@time} macro from the algorithm's performance on the input datasets varying in length and number of input sequences.
 \subsubsection{Question 2: How many mismatches can PSO-HMC tolerate in detecting motifs?}
+The precision, recall, and F1 score will be computed across the number of mutations and motif length.
 \subsubsection{Question 3: What is PSO-HMC performance when there are zero instances of the motif in some sequences?}
+Input data will be generated where different fractions \texttt{0\%:10\%:50\%} of the sequences completely lack the planted motif. Precision, recall, and F1 score will be determined based on the fraction of input sequences with the planted motif.
+\subsubsection{Question 4: How does PSO-HMC perform on benchmarked, real transcription factor binding site datasets?}
+Manually annotated transcription factor binding site data from \texttt{footprintDB} will be tested against our implementation for precision, recall and F1 score to see how the algorithm works on real data.
+\subsubsection{Question 5: Does PSO-HMC detect anything interesting or convincing on new, real data? How do these results compare to other software?}
+The cotton fiber gene promoter dataset will be run through our program, MEME, and the PSO implementation in our template paper. Logo plots for the highest scoring motif in each sequence for the programs will be compared. The algorithm will be run for multiple motif lengths, and results will be manually inspected to determine which motif length should be displayed in the logo plots. It may be different motif lengths in different programs, since each will likely find different consensus motifs.
 \subsection{Evaluation and Statistics}
 \textcolor{blue}{KARTHIK} \\
 We will evaluate and compare the results obtained from our algorithm using the following metrics and synthetic and annotated datasets.
 \begin{itemize}
-	\item \textbf{Prcecision}: can be calculated by computing the ratio number of correctly predicted sites to the number of predicted sites.
+	\item \textbf{Precision}: can be calculated by computing the ratio number of correctly predicted sites to the number of predicted sites.
 	\item \textbf{Recall}: calculated by computing the number of correctly predicted sites to the binding sites present in the sequence.
-	\item \textbf{F1 Score}: It is the harmonic mean of precision and recall and infroms us about the balance between the two.
-	\item \textbf{Running Time}:
-	A run-time comparison will be plotted for different algorithms
+	\item \textbf{F1 Score}: It is the harmonic mean of precision and recall and informs us about the balance between the two.
+	\item \textbf{Running Time}: A run-time comparison will be plotted for our implementation compared to MEME and PSO from the template paper, as well as in response to changes in the input data size.
 	\item \textbf{Memory Usage} The extra memory used to run the algorithm and its scalability to larger input sequences will be discussed in our analysis.
 \end{itemize}
 \subsection{Deliverables}
 \textcolor{cyan}{done!} \\
-A poster presentation to CSC 530 classmates will be made at the end of the project. The poster will include a diagram showing how the PSO-HMC algorithm work; plots showing running time vs motif length, number of mismatches in, input sequence number, input sequence length for the simulated dataset; sensitivity and specificy for the motifs in the benchmarked data set from the database; and example sequence logos for motifs detected from the cotton dataset.  
+A project report and poster presentation to CSC 530 classmates will be finalized at the end of the project. The poster will include a diagram showing how the PSO-HMC algorithm work; plots showing running time vs motif length, number of mismatches in, input sequence number, input sequence length for the simulated dataset; sensitivity and specificy for the motifs in the benchmarked data set from the database; and example sequence logos for motifs detected from the cotton dataset.  
   
   Code will be made available on a public GitHub repo (\url{https://github.com/gtbil/CSC530_project}) at the project's close.  
   
@@ -86,8 +93,10 @@ A poster presentation to CSC 530 classmates will be made at the end of the proje
 \textcolor{blue}{KARTHIK} \\
 \begin{itemize}
     \item Stuck in local optima : Restart randomly and at random initial positions.
-	\item Poor model convergence due to bad sequence initialization. To be handled by starting with a random subsequence of the input sequence.
-	
+	\item Poor model convergence due to bad sequence initialization: To be handled by starting with a random subsequence of the input sequence.
+	\item Hard to find hyper-parameters that work well in many situations: Make hyper-parameters adaptive so they change based on the rate at which the best score changes.
+	\item Difficult in applying or using HMC: Implement a simpler Monte Carlo method, like Metropolis-Hastings.
+	\item Running time is too slow for all combinations of variables in computational experiments: The experiments will be modified to only change on variable at a time.
 \end{itemize}
 \section{Timeline}
 \textcolor{cyan}{done!} \\
