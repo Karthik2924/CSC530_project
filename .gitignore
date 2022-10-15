@@ -298,3 +298,6 @@ TSWLatexianTemp*
 
 # xwatermark package
 *.xwm
+*.html
+*.svg
+*.css
