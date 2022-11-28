@@ -1,0 +1,9 @@
+Submitted	11/27/2022, 6:05:40 PM
+Expires	12/1/2022, 6:05:40 PM
+(Primary) Sequences	A set of 314 DNA sequences, all 1000 in length, from the file cotton_fiber_promoters.fasta.
+Background	A 0-order background model generated from the supplied sequences.
+Discovery Mode	Classic: optimizes the E-value of the motif information content
+Site Distribution	One occurrence (of a contributing motif site) per sequence
+Motif Count	Searching for one motif.
+Motif Width	Exactly 6 wide.
+No RC	Motif sites will only be considered if they are on the given strand.
