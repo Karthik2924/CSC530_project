@@ -6,6 +6,3 @@
   
 ![Poster of Our project](pso.png)
 
-Here's [a link](https://docs.google.com/presentation/d/167Bzklvxbofy5MZadfOqJj-SSnjdp34yvcKUhMzlE84/edit?usp=sharing) to the proposal presentation for 09/22/22
-
-Here's a note from my desktop
