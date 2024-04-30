@@ -13,6 +13,8 @@
   
 ![Poster of Our project](pso.png)
 
+* The complete Project Report can be found [here](Group2_CS530_Project_Report.pdf).
+
 ### References 
 Lei, C., Ruan, J. A particle swarm optimization-based algorithm for finding gapped motifs. BioData Mining 3, 9 (2010). https://doi.org/10.1186/1756-0381-3-9
 
